@@ -1,5 +1,5 @@
 import API, { apiFetch } from '../../config/api.js';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link, Navigate } from 'react-router-dom';
 
 // Helper — where should this role go after login?
@@ -10,6 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [apiStatus, setApiStatus] = useState('checking');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -23,6 +24,14 @@ const Login = () => {
   // otherwise use role-based home
   const from = location.state?.from || null;
 
+  useEffect(() => {
+    apiFetch('/', {}, 8000)
+      .then((res) => {
+        setApiStatus(res.ok ? 'online' : 'offline');
+      })
+      .catch(() => setApiStatus('offline'));
+  }, []);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!email || !password) { setError('Email and password are required.'); return; }
@@ -33,8 +42,15 @@ const Login = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
-      }, 15000);
-      const data = await response.json();
+      }, 20000);
+
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error('Server ne sahi response nahi diya. Backend deploy check karein.');
+      }
+
       if (response.ok) {
         localStorage.setItem('user', JSON.stringify(data.user));
         localStorage.setItem('auth-token', data.token);
@@ -47,8 +63,11 @@ const Login = () => {
       } else {
         setError(data.message || 'Login failed');
       }
-    } catch {
-      setError('Backend server reachable nahi hai. Pehle Render par API deploy karein, phir login try karein.');
+    } catch (err) {
+      setError(
+        err.message ||
+        `Backend (${API}) reachable nahi. Render par server folder deploy karein, phir Vercel par REACT_APP_API_URL set karein.`
+      );
     } finally {
       setLoading(false);
     }
@@ -80,6 +99,15 @@ const Login = () => {
           <h1 className="text-2xl font-bold mb-1" style={{ color: '#1e293b' }}>Welcome Back!</h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>Sign in to your ShopEase account</p>
         </div>
+
+        {apiStatus === 'offline' && (
+          <div
+            className="mb-4 p-3 rounded-xl text-xs"
+            style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c' }}
+          >
+            ⚠️ Backend API offline hai ({API}). Login tab tak kaam nahi karega jab tak Render par server deploy na ho.
+          </div>
+        )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
