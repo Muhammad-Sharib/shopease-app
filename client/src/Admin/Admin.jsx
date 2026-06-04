@@ -1,7 +1,7 @@
+import API from '../config/api.js';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 const StatCard = ({ label, value, icon, color }) => (
   <div className="rounded-xl p-5 flex items-center gap-4"
     style={{ background: '#1e1e2e', border: `1px solid ${color}33` }}>

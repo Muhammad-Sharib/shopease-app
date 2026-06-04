@@ -1,6 +1,6 @@
+import API from '../../config/api.js';
 import React, { useEffect, useState } from 'react';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 const statusColors = {
   pending:   { color: '#f59e0b', bg: 'rgba(245,158,11,0.15)' },
   processed: { color: '#3b82f6', bg: 'rgba(59,130,246,0.15)' },

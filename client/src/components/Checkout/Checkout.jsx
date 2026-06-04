@@ -1,9 +1,9 @@
+import API from '../../config/api.js';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { FaLock, FaMapMarkerAlt, FaShoppingBag } from 'react-icons/fa';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 const Checkout = () => {
   const [cartItems, setCartItems]       = useState([]);
   const [shippingAddress, setShippingAddress] = useState({

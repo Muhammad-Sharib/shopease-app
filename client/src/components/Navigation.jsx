@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaShoppingCart, FaBars, FaTimes, FaUser, FaCog, FaHeart, FaChevronDown } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+import { apiFetch } from '../config/api.js';
 const CATEGORIES = [
   { slug: 'clothing',    label: 'Clothing',     icon: '👕' },
   { slug: 'electronics', label: 'Electronics',  icon: '💻' },
@@ -37,16 +36,21 @@ const Navigation = () => {
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchCartItems = async () => {
       try {
         const user = JSON.parse(localStorage.getItem('user'));
-        if (!user) return;
-        const response = await fetch(`${API}/api/cart/${user._id}`);
+        if (!user || cancelled) return;
+        const response = await apiFetch(`/api/cart/${user._id}`, {}, 5000);
+        if (!response.ok || cancelled) return;
         const data = await response.json();
         setCartItemsCount(data.cart?.length || 0);
       } catch {}
     };
+
     fetchCartItems();
+    return () => { cancelled = true; };
   }, []);
 
   const isLoggedIn = !!localStorage.getItem('auth-token');

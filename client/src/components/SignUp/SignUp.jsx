@@ -1,7 +1,7 @@
+import API from '../../config/api.js';
 import React, { useState } from 'react';
 import { useNavigate, Link, Navigate } from 'react-router-dom';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 // Helper — where should this role go after auth?
 const roleHome = (role) => (role === 'admin' ? '/admin' : '/');
 

@@ -1,6 +1,6 @@
+import API from '../../config/api.js';
 import React, { useState } from 'react';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 // All available categories matching the store's category system
 const CATEGORIES = [
   { group: 'Fashion',      items: [
