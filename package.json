@@ -1,0 +1,8 @@
+{
+  "name": "shopease",
+  "private": true,
+  "scripts": {
+    "build": "npm run build --prefix client",
+    "vercel-build": "npm run build --prefix client"
+  }
+}
