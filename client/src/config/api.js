@@ -1,14 +1,17 @@
-// Production fallback — Vercel preview builds often miss REACT_APP_API_URL at build time
+// Local dev: always use localhost when opened in browser on this machine
+const isLocalhost =
+  typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
 const PRODUCTION_API = 'https://shopease-api.onrender.com';
 
-const API_BASE =
-  process.env.REACT_APP_API_URL ||
-  (process.env.NODE_ENV === 'production' ? PRODUCTION_API : 'http://localhost:9999');
+const API_BASE = isLocalhost
+  ? 'http://localhost:9999'
+  : process.env.REACT_APP_API_URL || PRODUCTION_API;
 
 export default API_BASE;
 
-/** Fetch with timeout so slow/dead APIs never block the UI for minutes */
-export async function apiFetch(path, options = {}, timeoutMs = 8000) {
+export async function apiFetch(path, options = {}, timeoutMs = 15000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
 
@@ -22,7 +25,7 @@ export async function apiFetch(path, options = {}, timeoutMs = 8000) {
   }
 }
 
-export async function apiJson(path, options = {}, timeoutMs = 8000) {
+export async function apiJson(path, options = {}, timeoutMs = 15000) {
   const res = await apiFetch(path, options, timeoutMs);
   if (!res.ok) throw new Error(`API ${path} failed (${res.status})`);
   return res.json();
