@@ -1,7 +1,7 @@
+import API from '../../config/api.js';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 const ViewProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaTruck, FaUndo, FaShieldAlt, FaShoppingBag } from 'react-icons/fa';
 import HeroSlider from './HeroSlider';
 import CategorySection from './Products/CategorySection';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+import { apiJson } from '../config/api.js';
 // All supported categories with display info
 const CATEGORY_CONFIG = [
   { slug: 'clothing',    label: 'Clothing',     icon: '👕' },
@@ -31,19 +30,23 @@ const Home = () => {
   ];
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchProducts = async () => {
       try {
-        const res = await fetch(`${API}/api/products`);
-        const data = await res.json();
-        const active = data.filter(p => p.status === 'active' || !p.status);
+        const data = await apiJson('/api/products', {}, 8000);
+        if (cancelled) return;
+        const active = data.filter((p) => p.status === 'active' || !p.status);
         setAllProducts(active);
       } catch (e) {
-        console.error(e);
+        console.warn('Products unavailable:', e.message);
       } finally {
-        setLoadingProducts(false);
+        if (!cancelled) setLoadingProducts(false);
       }
     };
+
     fetchProducts();
+    return () => { cancelled = true; };
   }, []);
 
   // Group products by category

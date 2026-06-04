@@ -1,10 +1,10 @@
+import API from '../../config/api.js';
 import React, { useEffect, useState } from 'react';
 
 import { useParams, Link } from 'react-router-dom';
 
 import { FaStar, FaShoppingCart, FaHeart, FaRegHeart, FaSearch } from 'react-icons/fa';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 // Map URL slug → display name + icon
 const CATEGORY_META = {
   clothing:    { label: 'Clothing',     icon: '👕', desc: 'Tops, shirts, dresses and more' },

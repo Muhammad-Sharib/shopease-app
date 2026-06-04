@@ -1,8 +1,8 @@
+import API from '../../config/api.js';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaStar, FaShoppingCart, FaSearch, FaHeart, FaRegHeart } from 'react-icons/fa';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 const Cards = () => {
   const [searchTerm, setSearchTerm]       = useState('');
   const [products, setProducts]           = useState([]);

@@ -1,8 +1,8 @@
+import API from '../../config/api.js';
 import React, { useEffect, useState } from 'react';
 
 import { FaHeart } from 'react-icons/fa';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 const WishlistAnalytics = () => {
   const [stats, setStats] = useState([]);
   const [allWishlists, setAllWishlists] = useState([]);

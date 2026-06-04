@@ -1,18 +1,46 @@
-import { connect } from 'mongoose';
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
+const cache = global.mongooseCache ?? (global.mongooseCache = { promise: null });
+
+export function isDbConnected() {
+  return mongoose.connection.readyState === 1;
+}
+
 async function dbConnect() {
+  if (!MONGODB_URI) {
+    console.error('❌ MONGODB_URI missing — set in server/.env (local) or Vercel Environment Variables');
+    return false;
+  }
+
+  if (isDbConnected()) return true;
+
+  if (!cache.promise) {
+    cache.promise = mongoose
+      .connect(MONGODB_URI, {
+        serverSelectionTimeoutMS: 15000,
+        bufferCommands: false,
+      })
+      .then(() => {
+        console.log('✅ Connected to MongoDB successfully');
+        return true;
+      })
+      .catch((error) => {
+        cache.promise = null;
+        console.error('❌ MongoDB connection error:', error.message);
+        throw error;
+      });
+  }
+
   try {
-    // DB name is included in the URI (E-commerce)
-    await connect(MONGODB_URI);
-    console.log('✅ Connected to MongoDB successfully');
-  } catch (error) {
-    console.error('❌ MongoDB connection error:', error.message);
-    process.exit(1); // Exit process on connection failure
+    await cache.promise;
+    return isDbConnected();
+  } catch {
+    return false;
   }
 }
 

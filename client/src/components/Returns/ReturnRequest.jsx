@@ -1,10 +1,10 @@
+import API from '../../config/api.js';
 import React, { useEffect, useState, useCallback } from 'react';
 
 import { useNavigate, Link } from 'react-router-dom';
 
 import { FaUndo, FaCheckCircle, FaClock, FaTimesCircle, FaMoneyBillWave } from 'react-icons/fa';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 const statusConfig = {
   pending:  { color: '#f59e0b', bg: '#fef3c7', icon: <FaClock size={11} />,        label: 'Pending Review' },
   approved: { color: '#3b82f6', bg: '#dbeafe', icon: <FaCheckCircle size={11} />,  label: 'Approved' },

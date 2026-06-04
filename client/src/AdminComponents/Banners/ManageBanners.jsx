@@ -1,6 +1,6 @@
+import API from '../../config/api.js';
 import React, { useEffect, useState } from 'react';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 const ManageBanners = () => {
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);

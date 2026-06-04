@@ -1,7 +1,7 @@
+import API from '../../config/api.js';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 const CATEGORIES = [
   { group: 'Fashion', items: [
     { value: 'mens',        label: "Men's Clothing",     icon: '👔' },

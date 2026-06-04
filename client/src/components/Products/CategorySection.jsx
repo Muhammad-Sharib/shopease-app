@@ -1,10 +1,10 @@
+import API from '../../config/api.js';
 import React, { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
 import { FaStar, FaShoppingCart, FaHeart, FaRegHeart, FaArrowRight } from 'react-icons/fa';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 const CategorySection = ({ categoryName, products, icon }) => {
   const [addedId, setAddedId]         = useState(null);
   const [wishlistIds, setWishlistIds] = useState(new Set());

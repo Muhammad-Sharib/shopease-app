@@ -1,10 +1,10 @@
+import API from '../../config/api.js';
 import React, { useEffect, useState, useCallback } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
 
 import { FaHeart, FaShoppingCart, FaStar } from 'react-icons/fa';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 const Wishlist = () => {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);

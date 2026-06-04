@@ -1,8 +1,8 @@
+import API from '../../config/api.js';
 import React, { useEffect, useState } from 'react';
 import { FaBox, FaMapMarkerAlt, FaCheckCircle, FaClock, FaTruck, FaHeart, FaUndo } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 const statusConfig = {
   pending:   { color: '#f59e0b', bg: '#fef3c7', icon: <FaClock size={11} /> },
   processed: { color: '#3b82f6', bg: '#dbeafe', icon: <FaBox size={11} /> },

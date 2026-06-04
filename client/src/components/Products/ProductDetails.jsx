@@ -1,8 +1,8 @@
+import API from '../../config/api.js';
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaStar, FaRegStar, FaShoppingCart, FaHeart, FaRegHeart, FaArrowLeft } from 'react-icons/fa';
-
-const API = process.env.REACT_APP_API_URL || 'http://localhost:9999';
+
 const ProductDetails = () => {
   const { ProductId } = useParams();
   const [product, setProduct]         = useState(null);
