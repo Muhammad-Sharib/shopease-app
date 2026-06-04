@@ -1,7 +1,7 @@
-import API from '../../config/api.js';
+import API, { apiFetch } from '../../config/api.js';
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link, Navigate } from 'react-router-dom';
-
+
 // Helper — where should this role go after login?
 const roleHome = (role) => (role === 'admin' ? '/admin' : '/');
 
@@ -29,11 +29,11 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`${API}/api/login`, {
+      const response = await apiFetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
-      });
+      }, 15000);
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('user', JSON.stringify(data.user));
@@ -48,7 +48,7 @@ const Login = () => {
         setError(data.message || 'Login failed');
       }
     } catch {
-      setError('An error occurred. Please try again.');
+      setError('Backend server reachable nahi hai. Pehle Render par API deploy karein, phir login try karein.');
     } finally {
       setLoading(false);
     }
