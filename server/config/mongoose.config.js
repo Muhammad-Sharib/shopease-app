@@ -5,34 +5,43 @@ dotenv.config();
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
+const cache = global.mongooseCache ?? (global.mongooseCache = { promise: null });
+
 export function isDbConnected() {
   return mongoose.connection.readyState === 1;
 }
 
 async function dbConnect() {
   if (!MONGODB_URI) {
-    console.error('❌ MONGODB_URI missing in server/.env');
-    return;
+    console.error('❌ MONGODB_URI missing — set in server/.env (local) or Vercel Environment Variables');
+    return false;
   }
 
-  const maxAttempts = 5;
+  if (isDbConnected()) return true;
 
-  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
-    try {
-      await mongoose.connect(MONGODB_URI, {
-        serverSelectionTimeoutMS: 10000,
+  if (!cache.promise) {
+    cache.promise = mongoose
+      .connect(MONGODB_URI, {
+        serverSelectionTimeoutMS: 15000,
+        bufferCommands: false,
+      })
+      .then(() => {
+        console.log('✅ Connected to MongoDB successfully');
+        return true;
+      })
+      .catch((error) => {
+        cache.promise = null;
+        console.error('❌ MongoDB connection error:', error.message);
+        throw error;
       });
-      console.log('✅ Connected to MongoDB successfully');
-      return;
-    } catch (error) {
-      console.error(`❌ MongoDB attempt ${attempt}/${maxAttempts}:`, error.message);
-      if (attempt < maxAttempts) {
-        await new Promise((r) => setTimeout(r, 3000));
-      }
-    }
   }
 
-  console.error('⚠️ MongoDB not connected — server chalega lekin login/API kaam nahi karega jab tak Atlas connect na ho.');
+  try {
+    await cache.promise;
+    return isDbConnected();
+  } catch {
+    return false;
+  }
 }
 
 export default dbConnect;
