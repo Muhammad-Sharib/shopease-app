@@ -47,7 +47,7 @@ const Login = () => {
         setError(data.message || 'Invalid email or password');
       }
     } catch {
-      setError('Server nahi chal raha. Pehle "cd server" phir "npm start" chalao (port 9999).');
+      setError('is ke maa ka aaaaaaaaaaaaaaaaaaaaa');
     } finally {
       setLoading(false);
     }
